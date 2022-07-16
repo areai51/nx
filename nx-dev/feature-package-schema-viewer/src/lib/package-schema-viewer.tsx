@@ -1,5 +1,5 @@
-import { Breadcrumbs } from '@nrwl/nx-dev/ui-common';
-import cx from 'classnames';
+import { Menu } from '@nrwl/nx-dev/models-menu';
+import { Breadcrumbs, Footer, SidebarContainer } from '@nrwl/nx-dev/ui-common';
 import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
 import Content from './content';
@@ -7,8 +7,12 @@ import { getSchemaViewModel, SchemaViewModel } from './get-schema-view-model';
 import { SchemaRequest } from './schema-request.models';
 
 export function PackageSchemaViewer({
+  menu,
+  navIsOpen,
   schemaRequest,
 }: {
+  menu: Menu;
+  navIsOpen: boolean;
   schemaRequest: SchemaRequest;
 }): JSX.Element {
   const router = useRouter();
@@ -63,20 +67,21 @@ export function PackageSchemaViewer({
           type: 'website',
         }}
       />
-      <div className="mx-auto w-full max-w-screen-lg">
-        <div className="lg:flex">
-          <div
-            id="content-wrapper"
-            className={cx(
-              'w-full min-w-0 flex-auto flex-col pt-16 md:px-4 lg:static lg:max-h-full lg:overflow-visible'
-            )}
-          >
-            <div className="mb-12 block w-full">
+      <SidebarContainer menu={menu} navIsOpen={navIsOpen} />
+      <div
+        id="wrapper"
+        data-testid="wrapper"
+        className="flex flex-grow flex-col items-stretch justify-start overflow-y-scroll"
+      >
+        <div className="mx-auto w-full grow items-stretch px-4 sm:px-6 lg:px-8 2xl:max-w-6xl">
+          <div id="content-wrapper" className="w-full flex-auto flex-col">
+            <div className="mb-6 pt-8">
               <Breadcrumbs path={router.asPath} />
             </div>
             <Content schemaViewModel={vm.schema} />
           </div>
         </div>
+        <Footer />
       </div>
     </>
   );
